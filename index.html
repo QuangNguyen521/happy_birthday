@@ -1,40 +1,171 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Happy Birthday Hìn Chù 🎂</title>
-    <style>
-        body {
-            text-align: center;
-            background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
-            font-family: Arial;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<title>Happy Birthday Hìn Chù 🎂</title>
 
-        h1 {
-            margin-top: 100px;
-            font-size: 40px;
-            color: white;
-        }
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle, #1a1a2e, #000);
+    font-family: Arial;
+    text-align: center;
+    color: white;
+}
 
-        button {
-            font-size: 20px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+h1 {
+    margin-top: 80px;
+    font-size: 42px;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #fff; }
+    to { text-shadow: 0 0 30px #ff4d6d, 0 0 60px #ff4d6d; }
+}
+
+button {
+    margin-top: 20px;
+    font-size: 20px;
+    padding: 12px 25px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    background: #ff4d6d;
+    color: white;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+/* HEART */
+.heart {
+    position: absolute;
+    color: pink;
+    font-size: 20px;
+    animation: float 4s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); opacity: 1;}
+    100% { transform: translateY(-800px); opacity: 0;}
+}
+
+/* MESSAGE BOX */
+#messageBox {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    background: rgba(0,0,0,0.85);
+    padding: 20px;
+    border-radius: 15px;
+    font-size: 18px;
+    animation: fadeIn 2s;
+}
+
+@keyframes fadeIn {
+    from {opacity:0;}
+    to {opacity:1;}
+}
+</style>
 </head>
+
 <body>
 
 <h1>🎂 Happy Birthday Hìn Chù 🎂</h1>
+<button onclick="start()">Bấm vào đây 🎁</button>
 
-<button onclick="showMessage()">Bấm vào đây 🎁</button>
+<div id="messageBox"></div>
 
 <script>
-function showMessage() {
-    alert("Chúc mừng sinh nhật Hìn Chù 🎉🎉🎉");
+// 🎵 Nhạc
+let audio = new Audio("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
+
+// ❤️ tạo trái tim
+function createHeart() {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = (15 + Math.random() * 25) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 4000);
+}
+setInterval(createHeart, 200);
+
+// 🎆 pháo hoa đơn giản
+function firework(x, y) {
+    for (let i = 0; i < 30; i++) {
+        let spark = document.createElement("div");
+        spark.style.position = "absolute";
+        spark.style.width = "5px";
+        spark.style.height = "5px";
+        spark.style.background = "hsl(" + Math.random()*360 + ",100%,50%)";
+        spark.style.left = x + "px";
+        spark.style.top = y + "px";
+
+        document.body.appendChild(spark);
+
+        let angle = Math.random() * 2 * Math.PI;
+        let speed = Math.random() * 5;
+
+        let vx = Math.cos(angle) * speed;
+        let vy = Math.sin(angle) * speed;
+
+        let life = 50;
+
+        let interval = setInterval(() => {
+            spark.style.left = (spark.offsetLeft + vx) + "px";
+            spark.style.top = (spark.offsetTop + vy) + "px";
+            spark.style.opacity = life / 50;
+            life--;
+
+            if (life <= 0) {
+                clearInterval(interval);
+                spark.remove();
+            }
+        }, 20);
+    }
+}
+
+// click tạo pháo hoa
+document.addEventListener("click", (e) => {
+    firework(e.clientX, e.clientY);
+});
+
+// 🎁 bắt đầu
+function start() {
+    audio.play();
+
+    let text = `Chúc mừng sinh nhật em,
+chúc em sống trong ánh sáng của mười phương chư phật,
+luôn xinh đẹp và giàu có sống như một bà hoàng,
+hằng ngày có trai sáu múi xếp hàng hầu hạ,
+cung phụng nhà lầu, xe sang,
+iphone 17 pro max màu trắng 2TB cho em nhé,
+à và chúc em sức khoẻ và bình an trong cuộc sống,
+đừng vì chạy theo tư bản mà hao công tổn sức
+cũng đừng vì muốn dáng đẹp người đẹp mà bỏ ăn bỏ uống nhé,
+Chúc nhiều rồi, Happy Birthday!!!`;
+
+    let box = document.getElementById("messageBox");
+    box.style.display = "block";
+
+    let i = 0;
+    box.innerHTML = "";
+
+    let typing = setInterval(() => {
+        box.innerHTML += text[i];
+        i++;
+        if (i >= text.length) clearInterval(typing);
+    }, 30);
 }
 </script>
 
